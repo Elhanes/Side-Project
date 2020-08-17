@@ -14,6 +14,13 @@
           <li>승 : {{ stat['league'][i]['win'] }} / 패 : {{ stat['league'][i]['lose'] }} / 승률 : {{ stat['league'][i]['rate'] }}%</li>
         </ul>
         {% endfor %}
+        <div>
+          <p> {{stat['match']['mode']}} / {{stat['match']['time']}} / {{stat['match']['duration']}}분 </p>
+          <p> {{stat['match']['champ']}} / {{stat['match']['champLevel']}} / {{stat['match']['spell1']}} / {{stat['match']['spell2']}}
+          <p> 아이템 : {{stat['match']['item0']}} / {{stat['match']['item1']}} / {{stat['match']['item2']}} / {{stat['match']['item3']}} / {{stat['match']['item4']}} / {{stat['match']['item5']}} / {{stat['match']['itme6']}}
+          <p> 룬 : {{stat['match']['runeCore']}} / {{stat['match']['runeMain']}}, {{stat['match']['runeSub']}}
+          <p> KDA : {{stat['match']['kill']}} / {{stat['match']['death']}} / {{stat['match']['assist']}}
+        </div>
     {% endif %}
     
 {% endblock %}

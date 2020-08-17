@@ -1,6 +1,7 @@
 from riotwatcher import LolWatcher, ApiError
+from getKey import getKey
 
-key = '1'
+key = getKey()
 lw = LolWatcher(key)
 mr = 'kr'
 

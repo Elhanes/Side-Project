@@ -1,15 +1,31 @@
-from riotwatcher import LolWatcher, ApiError
+import json
 
-key = '1'
-region = 'kr'
 
-lw = LolWatcher(key)
-#version = lw.data_dragon.versions_for_region(region)
-champ_list = lw.data_dragon.champions('10.16.1')
-champ = list(champ_list['data'].keys())
-champId = {}
+def champIdtoStr(id):
+    with open("flaskapp/static/json/champId.json", "r", encoding="utf-8") as f:
+        champ_json = json.load(f)
 
-for a in champ:
-    champId[champ_list['data'][a]['key']] = a
+    return champ_json[str(id)]
 
-print(champId)
+
+def spellIdtoStr(id):
+    with open("flaskapp/static/json/spellId.json", "r", encoding="utf-8") as f:
+        spell_json = json.load(f)
+
+    return spell_json[str(id)]
+
+
+def itemIdtoStr(id):
+    if id == 0:
+        return "None"
+    else:
+        with open("flaskapp/static/json/itemId.json", "r", encoding="utf-8") as f:
+            item_json = json.load(f)
+        return item_json[str(id)]
+
+
+def runeIdtoStr(id):
+    with open("flaskapp/static/json/runeId.json", "r", encoding="utf-8") as f:
+        rune_json = json.load(f)
+
+    return rune_json[str(id)]

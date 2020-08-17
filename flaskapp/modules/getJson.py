@@ -1,11 +1,13 @@
 import json
 from riotwatcher import LolWatcher, ApiError
+from getKey import getKey
 
 src_champ = "flaskapp/static/json/champId.json"
 src_item = "flaskapp/static/json/itemId.json"
 src_spell = "flaskapp/static/json/spellId.json"
+src_rune = "flaskapp/static/json/runeId.json"
 
-key = 'RGAPI-519b71b3-448e-4ab2-8f0f-55fb91ac4612'
+key = getKey()
 region = 'kr'
 #version = lw.data_dragon.versions_for_region(region)
 version = '10.16.1'
@@ -24,6 +26,7 @@ spell = list(spell_list['data'].keys())
 spell_id = {}
 
 rune_list = lw.data_dragon.runes_reforged(version)
+rune_id = {}
 
 for a in champ:
     champ_id[champ_list['data'][a]['key']] = a
@@ -34,11 +37,20 @@ for a in item:
 for a in spell:
     spell_id[spell_list['data'][a]['key']] = spell_list['data'][a]['name']
 
+for rune_category in rune_list:
+    rune_id[rune_category['id']] = rune_category['name']
+    for rune_slot_item in rune_category['slots']:
+        for rune_info in rune_slot_item['runes']:
+            rune_id[rune_info['id']] = rune_info['name']
+
 with open(src_champ, "w", encoding="utf-8") as f:
-    json.dump(champId, f, ensure_ascii=False, indent="\t")
+    json.dump(champ_id, f, ensure_ascii=False, indent="\t")
 
 with open(src_item, "w", encoding="utf-8") as f:
-    json.dump(itemId, f, ensure_ascii=False, indent="\t")
+    json.dump(item_id, f, ensure_ascii=False, indent="\t")
 
 with open(src_spell, "w", encoding="utf-8") as f:
-    json.dump(spellId, f, ensure_ascii=False, indent="\t")
+    json.dump(spell_id, f, ensure_ascii=False, indent="\t")
+
+with open(src_rune, "w", encoding="utf-8") as f:
+    json.dump(rune_id, f, ensure_ascii=False, indent="\t")
