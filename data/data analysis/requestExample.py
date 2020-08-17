@@ -1,7 +1,7 @@
 from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 
-api_key = "RGAPI-e8c6a8e0-30ad-4185-9456-9fb25de6358d"
+api_key = "1"
 watcher = LolWatcher(api_key)
 region = 'kr'
 
@@ -31,7 +31,7 @@ for row in detail['participants']:
     participants.append(participants_row)
 
 df = pd.DataFrame(participants)
-#df
+# df
 
 print(df)
 

@@ -1,0 +1,19 @@
+{% extends "main.html" %} 
+{% block content %}
+    <p>
+      {{ stat['nickname'] }} / 레벨 : {{ stat['level'] }} / 아이콘 : {{ stat['icon'] }}
+    </p>
+
+    {% if stat['league'] == 'unranked' %}
+        <p>Unranked</p>
+    {% else %}
+        {% for i in range(0, stat['league']|length) %}
+        <ul>
+          <li>큐 타입 : {{ stat['league'][i]['queue'] }}</li>
+          <li>티어 : {{ stat['league'][i]['tier'] }} {{ stat['league'][i]['rank'] }} / {{ stat['league'][i]['point'] }}pt</li>
+          <li>승 : {{ stat['league'][i]['win'] }} / 패 : {{ stat['league'][i]['lose'] }} / 승률 : {{ stat['league'][i]['rate'] }}%</li>
+        </ul>
+        {% endfor %}
+    {% endif %}
+    
+{% endblock %}

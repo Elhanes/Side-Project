@@ -5,7 +5,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0 meximum-scale=3.0"
     />
-    <link href="../css/main.css" rel="stylesheet" />
+    <link href="../static/css/main.css" rel="stylesheet" />
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap"
       rel="stylesheet"
@@ -18,14 +18,15 @@
     <title>Data Lab</title>
   </head>
   <body>
-    <!-- <h1>Data Lab</h1> -->
     <nav class="header">
       <div class="logo">
         <a href="#">DataLab</a>
       </div>
       <div class="search">
-        <input type="search" placeholder="Search by Nickname" id="statSearch"></input>
-        <button id="statButton">Search</button>
+        <form method="GET" action="/stat">
+          <input type="search" placeholder="Search by Nickname" name="statSearch" id="statSearch"></input>
+          <button type="submit" id="searchBtn">Search</button>
+        </form>
       </div>
       <ul class="nav_menu">
         <li><a href="#">Stat</a></li>
@@ -35,10 +36,9 @@
       </ul>
     </nav>
     <section>
-      <div>
-      </div>
-      <div>
-      </div>
+      {% block content %}
+        전적검색
+      {% endblock %}
     </section>
     <footer></footer>
   </body>
