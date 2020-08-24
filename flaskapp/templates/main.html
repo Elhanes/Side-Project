@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -5,41 +6,30 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0 meximum-scale=3.0"
     />
-    <link href="../static/css/main.css" rel="stylesheet" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap"
-      rel="stylesheet"
-    />
-    <script
-      src="https://kit.fontawesome.com/e280cef7b9.js"
-      crossorigin="e280cef7b9"
-    ></script>
-    <script src="main.js" defer></script>
     <title>Data Lab</title>
   </head>
   <body>
-    <nav class="header">
-      <div class="logo">
-        <a href="#">DataLab</a>
-      </div>
-      <div class="search">
-        <form method="GET" action="/stat">
-          <input type="search" placeholder="Search by Nickname" name="statSearch" id="statSearch"></input>
-          <button type="submit" id="searchBtn">Search</button>
-        </form>
-      </div>
-      <ul class="nav_menu">
-        <li><a href="#">Stat</a></li>
-        <li><a href="#">Data</a></li>
-        <li><a href="#">Anaylsis</a></li>
-        <li><a href="#">About</a></li>
-      </ul>
-    </nav>
-    <section>
-      {% block content %}
-        전적검색
-      {% endblock %}
-    </section>
+    <form class="form" method="GET" action="/stat">
+      <input
+        type="search"
+        name="statSearch"
+        placeholder="닉네임을 입력하세요. ex)개산벽"
+        size="100"
+      />
+      <button type="submit">검색</button>
+    </form>
+    <div>
+      {% block summonerInfo %} 전적검색 {% endblock %}
+    </div>
+    <br />
+    <div>
+      {% block rankInfo %}{% endblock %}
+    </div>
+    <br />
+    <div>
+      {% block matchInfo %}{% endblock %}
+    </div>
+    <br />
     <footer></footer>
   </body>
 </html>

@@ -1,26 +1,36 @@
 {% extends "main.html" %} 
-{% block content %}
+{% block summonerInfo %}
     <p>
-      {{ stat['nickname'] }} / 레벨 : {{ stat['level'] }} / 아이콘 : {{ stat['icon'] }}
-    </p>
+      {{ stat['icon'] }} / {{ stat['nickname'] }} / 레벨 : {{ stat['level'] }}
+    </p>    
+{% endblock %}
 
-    {% if stat['league'] == 'unranked' %}
-        <p>Unranked</p>
-    {% else %}
-        {% for i in range(0, stat['league']|length) %}
-        <ul>
-          <li>큐 타입 : {{ stat['league'][i]['queue'] }}</li>
-          <li>티어 : {{ stat['league'][i]['tier'] }} {{ stat['league'][i]['rank'] }} / {{ stat['league'][i]['point'] }}pt</li>
-          <li>승 : {{ stat['league'][i]['win'] }} / 패 : {{ stat['league'][i]['lose'] }} / 승률 : {{ stat['league'][i]['rate'] }}%</li>
-        </ul>
-        {% endfor %}
-        <div>
-          <p> {{stat['match']['mode']}} / {{stat['match']['time']}} / {{stat['match']['duration']}}분 </p>
-          <p> {{stat['match']['champ']}} / {{stat['match']['champLevel']}} / {{stat['match']['spell1']}} / {{stat['match']['spell2']}}
-          <p> 아이템 : {{stat['match']['item0']}} / {{stat['match']['item1']}} / {{stat['match']['item2']}} / {{stat['match']['item3']}} / {{stat['match']['item4']}} / {{stat['match']['item5']}} / {{stat['match']['itme6']}}
-          <p> 룬 : {{stat['match']['runeCore']}} / {{stat['match']['runeMain']}}, {{stat['match']['runeSub']}}
-          <p> KDA : {{stat['match']['kill']}} / {{stat['match']['death']}} / {{stat['match']['assist']}}
-        </div>
-    {% endif %}
-    
+{% block rankInfo %}
+    <p>랭크정보</p>
+  {% if stat['league'] == 'unranked' %}
+    <p>Unranked</p>
+  {% else %}
+    {% for i in range(0, stat['league']|length) %}
+      <ul>
+        <li>큐 타입 : {{ stat['league'][i]['queue'] }}</li>
+        <li>티어 : {{ stat['league'][i]['tier'] }} {{ stat['league'][i]['rank'] }} / {{ stat['league'][i]['point'] }}pt</li>
+        <li>승 : {{ stat['league'][i]['win'] }} / 패 : {{ stat['league'][i]['lose'] }} / 승률 : {{ stat['league'][i]['rate'] }}%</li>
+      </ul>
+     {% endfor %}
+   {% endif %}
+{% endblock %}
+
+{% block matchInfo %}
+  <p> 최근 10 경기정보 </p>
+  {% for match_data in stat['match'] %}
+  <br />
+  <div>
+    <p> {{match_data['mode']}} / {{match_data['time']}} / {{match_data['duration']}}분 </p>
+    <p> {{match_data['champ']}} / {{match_data['champLevel']}} / {{match_data['spell1']}} / {{match_data['spell2']}}
+    <p> 아이템 : {{match_data['item0']}} / {{match_data['item1']}} / {{match_data['item2']}} / {{match_data['item3']}} / {{match_data['item4']}} / {{match_data['item5']}} / {{match_data['itme6']}}
+    <p> 룬 : {{match_data['runeCore']}} / {{match_data['runeMain']}}, {{match_data['runeSub']}}
+    <p> KDA : {{match_data['kill']}} / {{match_data['death']}} / {{match_data['assist']}}
+  </div>
+  <br />
+  {% endfor %}
 {% endblock %}

@@ -23,78 +23,86 @@ def statSearch(key, region, value):
     lw = LolWatcher(key)
     stat = {}
     summoner = lw.summoner.by_name(region, value)  # request 1
-    accountId = summoner['accountId']
-    summonerId = summoner['id']
-    leagueInfo = lw.league.by_summoner(region, summonerId)  # request 2
-    matchInfo = lw.match.matchlist_by_account(
-        region, accountId, None, None, None, 0, 20)  # request 3
+    account_id = summoner['accountId']
+    summoner_id = summoner['id']
+    league_info = lw.league.by_summoner(region, summoner_id)  # request 2
+    match_info = lw.match.matchlist_by_account(
+        region, account_id, None, None, None, 0, 9)  # request 3
 
+    # summoner information
     stat['nickname'] = value
     stat['icon'] = summoner['profileIconId']
     stat['level'] = summoner['summonerLevel']
 
-    if len(leagueInfo) == 0:
+    # rank information
+    if len(league_info) == 0:
         stat['league'] = 'unranked'
     else:
-        rankList = [0] * len(leagueInfo)
-        for i in range(0, len(leagueInfo)):
-            rankInfo = {}
-            rankInfo['queue'] = leagueInfo[i]['queueType']
-            rankInfo['tier'] = leagueInfo[i]['tier']
-            rankInfo['rank'] = leagueInfo[i]['rank']
-            rankInfo['point'] = leagueInfo[i]['leaguePoints']
-            rankInfo['win'] = leagueInfo[i]['wins']
-            rankInfo['lose'] = leagueInfo[i]['losses']
-            rankInfo['rate'] = round(
-                rankInfo['win']/(rankInfo['win']+rankInfo['lose'])*100, 2)
-            rankList[i] = rankInfo
-        stat['league'] = rankList
+        rank_list = [0] * len(league_info)
+        for i in range(0, len(league_info)):
+            rank_info = {}
+            rank_info['queue'] = league_info[i]['queueType']
+            rank_info['tier'] = league_info[i]['tier']
+            rank_info['rank'] = league_info[i]['rank']
+            rank_info['point'] = league_info[i]['leaguePoints']
+            rank_info['win'] = league_info[i]['wins']
+            rank_info['lose'] = league_info[i]['losses']
+            rank_info['rate'] = round(
+                rank_info['win']/(rank_info['win']+rank_info['lose'])*100, 2)
+            rank_list[i] = rank_info
+        stat['league'] = rank_list
 
-    match = lw.match.by_id(region, '4581401986')
+    # match information
+    match_user_id = 0
+    match_list = []
 
-    for match_user_info in match['participantIdentities']:
-        if match_user_info['player']['summonerName'] == value:
-            match_user_id = match_user_info['participantId']
-            break
+    for match_data in match_info['matches']:
+        match = lw.match.by_id(region, match_data['gameId'])  # request 4~23
+        for match_user_info in match['participantIdentities']:
+            if match_user_info['player']['summonerName'] == value:
+                match_user_id = match_user_info['participantId']
+                break
 
-    match_test = {}
-    match_test['time'] = datetime.fromtimestamp(match['gameCreation']/1000)
-    match_test['duration'] = match['gameDuration'] / 60
-    match_test['mode'] = match['gameMode']
-    match_test['champ'] = champIdtoStr(
-        match['participants'][match_user_id - 1]["championId"])
-    match_test['spell1'] = spellIdtoStr(
-        match['participants'][match_user_id - 1]["spell1Id"])
-    match_test['spell2'] = spellIdtoStr(
-        match['participants'][match_user_id - 1]["spell2Id"])
-    match_test['item0'] = itemIdtoStr(match['participants'][match_user_id -
-                                                            1]["stats"]["item0"])
-    match_test['item1'] = itemIdtoStr(match['participants'][match_user_id -
-                                                            1]["stats"]["item1"])
-    match_test['item2'] = itemIdtoStr(match['participants'][match_user_id -
-                                                            1]["stats"]["item2"])
-    match_test['item3'] = itemIdtoStr(match['participants'][match_user_id -
-                                                            1]["stats"]["item3"])
-    match_test['item4'] = itemIdtoStr(match['participants'][match_user_id -
-                                                            1]["stats"]["item4"])
-    match_test['item5'] = itemIdtoStr(match['participants'][match_user_id -
-                                                            1]["stats"]["item5"])
-    match_test['item6'] = itemIdtoStr(match['participants'][match_user_id -
-                                                            1]["stats"]["item6"])
-    match_test['kill'] = match['participants'][match_user_id -
-                                               1]["stats"]["kills"]
-    match_test['death'] = match['participants'][match_user_id -
-                                                1]["stats"]["deaths"]
-    match_test['assist'] = match['participants'][match_user_id -
-                                                 1]["stats"]["assists"]
-    match_test['champLevel'] = match['participants'][match_user_id -
-                                                     1]["stats"]["champLevel"]
-    match_test['runeMain'] = runeIdtoStr(match['participants'][match_user_id -
-                                                               1]["stats"]["perkPrimaryStyle"])
-    match_test['runeSub'] = runeIdtoStr(match['participants'][match_user_id -
-                                                              1]["stats"]["perkSubStyle"])
-    match_test['runeCore'] = runeIdtoStr(match['participants'][match_user_id -
-                                                               1]["stats"]["perk0"])
+        tmp_match = {}
+        tmp_match['time'] = datetime.fromtimestamp(
+            match['gameCreation']/1000)
+        tmp_match['duration'] = match['gameDuration'] / 60
+        tmp_match['mode'] = match['gameMode']
+        tmp_match['champ'] = champIdtoStr(
+            match['participants'][match_user_id - 1]["championId"])
+        tmp_match['spell1'] = spellIdtoStr(
+            match['participants'][match_user_id - 1]["spell1Id"])
+        tmp_match['spell2'] = spellIdtoStr(
+            match['participants'][match_user_id - 1]["spell2Id"])
+        tmp_match['item0'] = itemIdtoStr(match['participants'][match_user_id -
+                                                               1]["stats"]["item0"])
+        tmp_match['item1'] = itemIdtoStr(match['participants'][match_user_id -
+                                                               1]["stats"]["item1"])
+        tmp_match['item2'] = itemIdtoStr(match['participants'][match_user_id -
+                                                               1]["stats"]["item2"])
+        tmp_match['item3'] = itemIdtoStr(match['participants'][match_user_id -
+                                                               1]["stats"]["item3"])
+        tmp_match['item4'] = itemIdtoStr(match['participants'][match_user_id -
+                                                               1]["stats"]["item4"])
+        tmp_match['item5'] = itemIdtoStr(match['participants'][match_user_id -
+                                                               1]["stats"]["item5"])
+        tmp_match['item6'] = itemIdtoStr(match['participants'][match_user_id -
+                                                               1]["stats"]["item6"])
+        tmp_match['kill'] = match['participants'][match_user_id -
+                                                  1]["stats"]["kills"]
+        tmp_match['death'] = match['participants'][match_user_id -
+                                                   1]["stats"]["deaths"]
+        tmp_match['assist'] = match['participants'][match_user_id -
+                                                    1]["stats"]["assists"]
+        tmp_match['champLevel'] = match['participants'][match_user_id -
+                                                        1]["stats"]["champLevel"]
+        tmp_match['runeMain'] = runeIdtoStr(match['participants'][match_user_id -
+                                                                  1]["stats"]["perkPrimaryStyle"])
+        tmp_match['runeSub'] = runeIdtoStr(match['participants'][match_user_id -
+                                                                 1]["stats"]["perkSubStyle"])
+        tmp_match['runeCore'] = runeIdtoStr(match['participants'][match_user_id -
+                                                                  1]["stats"]["perk0"])
+        match_list.append(tmp_match)
 
-    stat['match'] = match_test
+    stat['match'] = match_list
     return stat
